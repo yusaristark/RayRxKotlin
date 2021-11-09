@@ -108,7 +108,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun actionSave() {
-        viewModel.saveBitmapFromImageView(collageImage, this).subscribeOn(Schedulers.io())
+        viewModel.saveBitmapFromImageView(collageImage, this)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
             onSuccess = { file ->
