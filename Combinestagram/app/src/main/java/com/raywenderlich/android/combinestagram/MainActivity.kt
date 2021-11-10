@@ -33,6 +33,7 @@ package com.raywenderlich.android.combinestagram
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -83,6 +84,19 @@ class MainActivity : AppCompatActivity() {
                 updateUi(photos)
             }
         })
+
+        viewModel.getThumbnailStatus().observe(this, Observer { status ->
+            if (status == ThumbnailStatus.READY) {
+                thumbnail.setImageDrawable(collageImage.drawable)
+            }
+        })
+
+        viewModel.getCollageStatus().observe(this, Observer { status ->
+            Log.d("MainActivity", status.toString())
+            if (status == CollageStatus.COMPLETE) {
+                Toast.makeText(this, getString(R.string.image_limit_reached), Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun updateUi(photos: List<Photo>) {
@@ -100,11 +114,14 @@ class MainActivity : AppCompatActivity() {
     private fun actionAdd() {
         val addPhotoBottomDialogFragment = PhotosBottomDialogFragment.newInstance()
         addPhotoBottomDialogFragment.show(supportFragmentManager, "PhotosBottomDialogFragment")
-        viewModel.subscribeSelectedPhotos(addPhotoBottomDialogFragment.selectedPhotos)
+        viewModel.subscribeSelectedPhotos(addPhotoBottomDialogFragment)
     }
 
     private fun actionClear() {
         viewModel.clearPhotos()
+        collageImage.setImageResource(android.R.color.transparent)
+        thumbnail.setImageResource(android.R.color.transparent)
+        updateUi(listOf())
     }
 
     private fun actionSave() {
