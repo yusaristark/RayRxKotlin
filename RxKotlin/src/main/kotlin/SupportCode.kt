@@ -1,3 +1,4 @@
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import java.awt.Label
 import java.util.Random
 
@@ -32,3 +33,20 @@ fun IntRange.random() = Random().nextInt(endInclusive - start) +  start
 sealed class HandError: Throwable() {
     class Busted: HandError()
 }
+
+fun String.romanNumeralIntValue(): Int {
+    return when (this) {
+        "I" -> 1
+        "V" -> 5
+        "X" -> 10
+        "L" -> 50
+        "C" -> 100
+        "D" -> 500
+        "M" -> 1000
+        else -> -1
+    }
+}
+
+class Student(val score: BehaviorSubject<Int>)
+
+const val sentinel = -1
