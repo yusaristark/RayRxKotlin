@@ -110,7 +110,7 @@ class SharedViewModel : ViewModel() {
                 val photos = imagesSubject.value ?: mutableListOf()
                 !(photos.map { it.drawable }).contains(newImage.drawable)
             }
-            .debounce(250, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .debounce(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .subscribe { photo ->
                 imagesSubject.value?.add(photo)
                 imagesSubject.onNext(imagesSubject.value ?: mutableListOf())
